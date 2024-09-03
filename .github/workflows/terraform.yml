@@ -12,7 +12,7 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
     environment: prod  
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -41,6 +41,21 @@ jobs:
           name: terraform-plan
           path: terraform.tfplan
 
+      - name: Generate Token
+        id: generate_token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - name: Wait for Approval
+        id: approval
+        uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ steps.generate_token.outputs.token }}
+          approvers: Mansi123098
+          minimum-approvals: 1
+
       - name: Terraform Apply
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.approval.outputs.approved == 'true'
         run: terraform apply -auto-approve terraform.tfplan
