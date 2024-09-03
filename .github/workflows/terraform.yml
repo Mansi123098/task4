@@ -40,12 +40,7 @@ jobs:
           name: terraform-plan
           path: terraform.tfplan
 
-      - name: Request Manual Approval
-        uses: peter-evans/manual-approval@v2
-        with:
-          reviewers: 'Mansi123098' 
-        id: approval
-
       - name: Terraform Apply
-        if: steps.approval.outputs.approved == 'true'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        environment: production
         run: terraform apply -auto-approve terraform.tfplan
