@@ -51,5 +51,5 @@ jobs:
           issue-body: "Please approve or deny the Terraform deployment."
 
       - name: Terraform Apply
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.manual_approval.outputs.approved == 'true'
-        run: terraform apply -auto-approve terraform.tfplan
+        if: steps.approval.outputs.approved == 'true'
+        run: terraform apply -auto-approve
