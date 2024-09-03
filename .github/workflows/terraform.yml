@@ -32,9 +32,20 @@ jobs:
         run: terraform init
 
       - name: Terraform Plan
-        run: terraform plan
+        run: terraform plan -out=terraform.tfplan
+
+      - name: Upload Terraform Plan
+        uses: actions/upload-artifact@v3
+        with:
+          name: terraform-plan
+          path: terraform.tfplan
+
+      - name: Request Manual Approval
+        uses: mansi/manual-approval@v2
+        with:
+          reviewers: 'Mansi123098'
+        id: approval
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve
-
-      
+        if: steps.approval.outputs.approved == 'true'
+        run: terraform apply -auto-approve terraform.tfplan
