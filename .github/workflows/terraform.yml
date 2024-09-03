@@ -41,20 +41,15 @@ jobs:
           name: terraform-plan
           path: terraform.tfplan
 
-      #- name: Generate Token
-        #id: generate_token
-        #uses: tibdex/github-app-token@v1
-        #with:
-          #app_id: ${{ secrets.APP_ID }}
-         # private_key: ${{ secrets.APP_PRIVATE_KEY }}
+      name: Manual Approval
+        uses: trstringer/manual-approval@
 
-      - name: Wait for Approval
-        id: approval
-        uses: trstringer/manual-approval@v1
         with:
-          #secret: ${{ steps.generate_token.outputs.token }}
-          approvers: Mansi123098
+          secret: ${{ secrets.GITHUB_TOKEN }}
+          approvers: Mansi123098S
           minimum-approvals: 1
+          issue-title: "Approval needed for Terraform deployment"
+          issue-body: "Please approve or deny the Terraform deployment."
 
       - name: Terraform Apply
         if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.approval.outputs.approved == 'true'
