@@ -45,12 +45,18 @@ resource "aws_subnet" "private" {
   }
 }
 
-/*resource "aws_subnet" "public" {
+resource "aws_subnet" "public" {
   vpc_id     = aws_vpc.main.id
   cidr_block = "10.0.2.0/24"
-  availability_zone = "ap-northeast-1a" 
+  availability_zone = "ap-northeast-1b" 
   
   tags = {
     Name = "public-subnet"
   }
-}*/
+}
+
+resource "aws_instance" "mansitask" {
+    ami = ami-00c79d83cf718a893
+    instance_type = t2.micro
+  
+}
