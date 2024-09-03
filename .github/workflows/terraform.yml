@@ -11,7 +11,8 @@ on:
 jobs:
   terraform:
     runs-on: ubuntu-latest
-
+    environment: prod  
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -42,5 +43,4 @@ jobs:
 
       - name: Terraform Apply
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        environment: prod
         run: terraform apply -auto-approve terraform.tfplan
