@@ -41,18 +41,18 @@ jobs:
           name: terraform-plan
           path: terraform.tfplan
 
-      - name: Generate Token
-        id: generate_token
-        uses: tibdex/github-app-token@v1
-        with:
-          app_id: ${{ secrets.APP_ID }}
-          private_key: ${{ secrets.APP_PRIVATE_KEY }}
+      #- name: Generate Token
+        #id: generate_token
+        #uses: tibdex/github-app-token@v1
+        #with:
+          #app_id: ${{ secrets.APP_ID }}
+         # private_key: ${{ secrets.APP_PRIVATE_KEY }}
 
       - name: Wait for Approval
         id: approval
         uses: trstringer/manual-approval@v1
         with:
-          secret: ${{ steps.generate_token.outputs.token }}
+          #secret: ${{ steps.generate_token.outputs.token }}
           approvers: Mansi123098
           minimum-approvals: 1
 
